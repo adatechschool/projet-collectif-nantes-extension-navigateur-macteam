@@ -1,0 +1,28 @@
+{
+  "name": "projet-collectif-nantes-extension-navigateur-macteam",
+  "version": "1.0.0",
+  "description": "### Git workflow",
+  "main": "index.js",
+  "scripts": {
+    "start": "parallelshell \"npm run on-change:build\" \"npm run web-ext:chromium\"",
+    "build": "npm run prepare-build && npm run vite-build",
+    "prepare-build": "node ./build-scripts/prepare-build.js",
+    "vite-build": "npm run vite-build-background  && npm run vite-build-content",
+    "vite-build-content": "vite build --config vite.config.content.js",
+    "vite-build-background": "vite build --config vite.config.background.js",
+    "web-ext:chromium": "npm run vite-build && npm run web-ext:dev-chromium",
+    "web-ext:dev-chromium": "web-ext run --source-dir ./dist/ --start-url https://en.wikipedia.org/wiki/Michael_Jordan --target=chromium",
+    "on-change:build": "chokidar \"./src\" -c \"npm run build\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "chokidar-cli": "^3.0.0",
+    "parallelshell": "3.0.1",
+    "shelljs": "^0.8.5",
+    "vite": "^4.2.1",
+    "web-ext": "^8.2.0",
+    "webext-bridge": "^6.0.1"
+  }
+}
