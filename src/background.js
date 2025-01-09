@@ -1,12 +1,14 @@
-import { onMessage } from "webext-bridge/background";
+import { onMessage, sendMessage } from "webext-bridge/background";
 
-console.log('Hello from background!');
-onMessage("RECORD_NAME", recordName);
+console.log('Hello from background!'); // Test 
+
+// On essaye d'envoyer le texte surligné au content-script
+onMessage("RECORD_NAME", recordName); 
 async function recordName({ data }) {
   // Do whatever processing you need here. 
-  console.log(data);
+  console.log(data)
   return {
-    // Some response here
+     // Some response here
   };
 }
 
@@ -34,6 +36,10 @@ chrome.contextMenus.onClicked.addListener((info, tab) => {
         if (selectionText) {
           console.log(selectionText)
         }
+        async function sendToContentScript(){
+        const response = await sendMessage("get-selection", selectionText, "content-script")
+        } 
+        sendToContentScript()
       },
     });
   }

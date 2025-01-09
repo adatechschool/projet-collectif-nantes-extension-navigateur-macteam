@@ -1,5 +1,5 @@
 console.log('Hello from content script!');
-import { sendMessage } from "webext-bridge/content-script";
+import { sendMessage, onMessage } from "webext-bridge/content-script";
 
 const sendToBackground = async () => {
     const response = await sendMessage('RECORD_NAME', {
@@ -11,3 +11,10 @@ const sendToBackground = async () => {
 }
 
 sendToBackground();
+
+onMessage("get-selection", async ({data}) => { 
+console.log(data)
+return { 
+
+}
+} )
