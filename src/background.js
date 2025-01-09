@@ -10,7 +10,7 @@ chrome.runtime.onInstalled.addListener(() => {
     contexts: ["all"],
   });
 });
-
+// Aprés avoir fait un clique droit, le menu contextuel s'ouvre, on enregistre le texte surligné puis envoyer au content_script
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "button") {
     const selectionText = info.selectionText;
