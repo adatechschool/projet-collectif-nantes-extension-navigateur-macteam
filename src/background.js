@@ -16,7 +16,7 @@ chrome.contextMenus.onClicked.addListener(async (info, tab) => {
     const selectionText = info.selectionText;
 
     console.log("Selection text in background:", selectionText);
-
+    
     await sendMessage("CONTEXT_TEXT", { text: selectionText}, { context: "content-script", tabId: tab.id });
   }
 });

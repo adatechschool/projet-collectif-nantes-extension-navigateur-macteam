@@ -18,6 +18,9 @@
     "scripting",
     "storage"
   ], 
+   "host_permissions": [
+    "https://chatgpt.com/*"],
+    
   "background":{
     "service_worker":"background.js",
     "type":"module"
