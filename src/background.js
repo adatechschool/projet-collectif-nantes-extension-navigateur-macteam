@@ -1,16 +1,6 @@
-import { onMessage, sendMessage } from "webext-bridge/background";
+import { sendMessage } from "webext-bridge/background";
 
-console.log('Hello from background!'); // Test 
-
-// On essaye d'envoyer le texte surligné au content-script
-onMessage("RECORD_NAME", recordName); 
-async function recordName({ data }) {
-  // Do whatever processing you need here. 
-  console.log(data)
-  return {
-     // Some response here
-  };
-}
+console.log("Hello from background!");
 
 // Permet de visualiser le bouton "help IA" dans le menu contextuel
 chrome.runtime.onInstalled.addListener(() => {
@@ -21,28 +11,12 @@ chrome.runtime.onInstalled.addListener(() => {
   });
 });
 
-
-
-chrome.contextMenus.onClicked.addListener((info, tab) => {
+chrome.contextMenus.onClicked.addListener(async (info, tab) => {
   if (info.menuItemId === "button") {
-    console.log("le bouton click");
-    console.log(info.selectionText);
-    chrome.scripting.executeScript({
-      target: { tabId: tab.id },
-      func: () => {
-        // récupérer le texte en surbrillance
-        const selection = window.getSelection()
-        const selectionText = selection.toString().trim()
-        if (selectionText) {
-          console.log(selectionText)
-        }
-        async function sendToContentScript(){
-        const response = await sendMessage("get-selection", selectionText, "content-script")
-        } 
-        sendToContentScript()
-      },
-    });
+    const selectionText = info.selectionText;
+
+    console.log("Selection text in background:", selectionText);
+
+    await sendMessage("CONTEXT_TEXT", { text: selectionText}, { context: "content-script", tabId: tab.id });
   }
 });
-
-

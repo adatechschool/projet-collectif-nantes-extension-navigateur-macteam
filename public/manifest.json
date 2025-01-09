@@ -9,13 +9,14 @@
   "content_scripts": [
     {
       "js": ["script.js"],
-      "matches": ["https://chatgpt.com/"]
+      "matches": ["<all_urls>"]
     }
   ],
   "permissions": [
     "contextMenus",
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage"
   ], 
   "background":{
     "service_worker":"background.js",
