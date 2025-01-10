@@ -1,18 +1,6 @@
 // src\script.js
 
-// import { onMessage } from "webext-bridge/content-script";
-
-console.log('Hello from content script!'); // Envoyer ce commentaire sur le DOM
-
-// // Reception du message CONTENT_TEXT depuis le background puis on envoie ce message au DOM (console) 
-// onMessage("CONTEXT_TEXT", async ({ data }) => {
-//     console.log("Received text from background:", data.text)
-//     window.location.href= "https://chatgpt.com/"
-    
-//     return {
-
-//     };
-// })
+console.log('Hello from content script!');
 
 if (window.location.hostname.includes("chatgpt.com")) {
     console.log("Running content script logic on chatgpt.com");
@@ -28,11 +16,15 @@ if (window.location.hostname.includes("chatgpt.com")) {
             if (help_IA_text) {
                 textarea.innerText = help_IA_text;
 
-                // const sendButton = document.querySelector('button[aria-label="Send prompt"]');
-                // console.log("sendButton:", sendButton);
-                // if (sendButton) {
-                //     sendButton.click();
-                // }
+                textarea.dispatchEvent(new Event("input", { bubbles: true }));
+
+                await new Promise((resolve) => setTimeout(resolve, 700));
+
+                const sendButton = document.querySelector('div.flex.gap-x-1 > button[aria-label="Send prompt"]');
+                console.log("sendButton:", sendButton);
+                if (sendButton && !sendButton.disabled) {
+                    sendButton.click();
+                }
 
                 await chrome.storage.local.remove("help_IA_text");
             }

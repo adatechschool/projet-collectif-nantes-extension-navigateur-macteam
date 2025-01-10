@@ -1,7 +1,5 @@
 // src\background.js
 
-// import { sendMessage } from "webext-bridge/background";
-
 console.log("Hello from background!");
 
 // Permet de visualiser le bouton "help IA" dans le menu contextuel
