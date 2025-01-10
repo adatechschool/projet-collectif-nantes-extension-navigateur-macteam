@@ -1,3 +1,5 @@
+// vite.config.content.js
+
 import { resolve } from 'path';
 import { defineConfig } from 'vite';
 

@@ -1,23 +1,27 @@
-import { sendMessage } from "webext-bridge/background";
+// src\background.js
+
+// import { sendMessage } from "webext-bridge/background";
 
 console.log("Hello from background!");
 
 // Permet de visualiser le bouton "help IA" dans le menu contextuel
 chrome.runtime.onInstalled.addListener(() => {
   chrome.contextMenus.create({
-    id: "button",
+    id: "help-ia",
     title: "Help IA",
-    contexts: ["all"],
+    contexts: ["selection"],
   });
 });
 
 // Après avoir fait un clique droit, le menu contextuel s'ouvre, on enregistre le texte surligné puis envoyer au content_script
 chrome.contextMenus.onClicked.addListener(async (info, tab) => {
-  if (info.menuItemId === "button") {
-    const selectionText = info.selectionText;
+  if (info.menuItemId === "help-ia") {
+    const selectionText = info.selectionText || "";
 
-    console.log("Selection text in background:", selectionText);
+    console.log("Background script got selection text:", selectionText);
     
-    await sendMessage("CONTEXT_TEXT", { text: selectionText}, { context: "content-script", tabId: tab.id });
+    await chrome.storage.local.set({ help_IA_text: selectionText });
+
+    chrome.tabs.create({ url: "https://chatgpt.com/" });
   }
 });
