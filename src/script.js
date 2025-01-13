@@ -1,93 +1,83 @@
-// src\script.js
-
 console.log('Hello from content script!');
 
-let popup = null
+let popup = null;
 
-// Fonction pour retirer le popup si aucun texte n'est surligné
-function removePopup(){
-    if (popup && popup.parentNode) {
-        popup.parentNode.removeChild(popup)
-        popup = null
-    } 
-}
+// Événement déclenché lorsqu'un texte est surligné
+document.addEventListener("mouseup", (e) => {
+    const selectionText = window.getSelection().toString().trim();
 
-function handleSummary() {
-    const selectionText = window.getSelection().toString();
-    console.log("Summary:", selectionText, "popup:", popup);
-    removePopup()
+    // Supprime le popup si aucun texte n'est sélectionné
+    if (!selectionText) {
+        removePopup();
+        return;
+    }
 
-    // if (window.location.hostname.includes("chatgpt.com")) {
-    //     console.log("Running content script logic on chatgpt.com");
+    // Crée un popup si du texte est sélectionné
+    createPopup(e);
+});
 
-    //     const intervalId = setInterval(async () => {
-    //         const textarea = document.querySelector("#prompt-textarea p");
-    //         console.log("textarea:", textarea);
+function createPopup(e) {
+    // Supprime un ancien popup avant d'en créer un nouveau
+    removePopup();
 
-    //         if (textarea) {
-    //             const { help_IA_text } = await chrome.storage.local.get("help_IA_text");
-    //             console.log("help_IA_text:", help_IA_text);
-
-    //             if (help_IA_text) {
-    //                 textarea.innerText = `${help_IA_text}\n\nFais une résumé de ce texte.`;
-
-    //                 textarea.dispatchEvent(new Event("input", { bubbles: true }));
-
-    //                 // temps d'attente pour que le bouton "send" soit actif
-    //                 await new Promise((resolve) => setTimeout(resolve, 700));
-
-    //                 const sendButton = document.querySelector('div.flex.gap-x-1 > button');
-    //                 console.log("sendButton:", sendButton);
-    //                 if (sendButton && !sendButton.disabled) {
-    //                     sendButton.click();
-    //                 }
-
-    //                 await chrome.storage.local.remove("help_IA_text");
-    //             }
-
-    //             clearInterval(intervalId);
-    //         }
-    //     }, 500);
-
-    //     // Au bout de 10 secondes, si on n'arrive pas à exécuter le script, on l'arrête 
-    //     setTimeout(() => clearInterval(intervalId), 10000);
-    // }
-}
-
-function createPopup(e){
-    // Create a small popup at mouse coordinates
+    // Crée le conteneur du popup
     popup = document.createElement("div");
-    
     popup.classList.add("help-ia-popup");
-    
-    popup.style.top = `${e.pageY + 10}px`; // a bit below the selection
+
+    // Style positionné en fonction des coordonnées du curseur
+    popup.style.position = "absolute";
+    popup.style.top = `${e.pageY + 10}px`;
     popup.style.left = `${e.pageX}px`;
-    
-    // Add some actions
+    popup.style.padding = "10px";
+    popup.style.border = "1px solid #ccc";
+    popup.style.backgroundColor = "#fff";
+    popup.style.boxShadow = "0 2px 5px rgba(0,0,0,0.2)";
+    popup.style.zIndex = "1000";
+
+    // Bouton "Résumé"
     const summarizeBtn = document.createElement("button");
-    summarizeBtn.innerText = "Summarize";
-    
-    const explainBtn = document.createElement("button");
-    explainBtn.innerText = "Explain";
-    
-    // Add event listeners for the buttons
+    summarizeBtn.innerText = "Résumé";
+    summarizeBtn.style.marginRight = "10px";
     summarizeBtn.addEventListener("click", () => handleSummary());
+
+    // Bouton "Explication"
+    const explainBtn = document.createElement("button");
+    explainBtn.innerText = "Expliquer";
     explainBtn.addEventListener("click", () => handleExplanation());
-    
+
     popup.appendChild(summarizeBtn);
     popup.appendChild(explainBtn);
-    
-    // Add the popup to the document
+
+    // Ajoute le popup au document
     document.body.appendChild(popup);
 }
 
-// Événement qui se déclenche lorsque le texte est surligné
-document.addEventListener("mouseup",(e) => {
-    const selectionText = window.getSelection().toString();
-    if (selectionText === "") {
-        removePopup()
-        return
+function removePopup() {
+    if (popup) {
+        popup.remove();
+        popup = null;
     }
-    
-    createPopup(e)
-})
+}
+
+function handleSummary() {
+    const selectionText = window.getSelection().toString().trim();
+    if (selectionText) {
+        // Navigue vers ChatGPT avec le texte sélectionné
+        window.open(`https://chat.openai.com/?text=${encodeURIComponent(selectionText)}`, '_blank');
+    }
+    removePopup();
+}
+
+function handleExplanation() {
+    const selectionText = window.getSelection().toString().trim();
+    if (selectionText) {
+        // Navigue vers ChatGPT avec une demande d'explication
+        window.open(`https://chat.openai.com/?text=Explain:${encodeURIComponent(selectionText)}`, '_blank');
+    }
+    removePopup();
+}
+
+
+
+
+
