@@ -18,9 +18,10 @@ if (window.location.hostname.includes("chatgpt.com")) {
 
                 textarea.dispatchEvent(new Event("input", { bubbles: true }));
 
+                // temps d'attente pour que le bouton "send" soit actif
                 await new Promise((resolve) => setTimeout(resolve, 700));
 
-                const sendButton = document.querySelector('div.flex.gap-x-1 > button[aria-label="Send prompt"]');
+                const sendButton = document.querySelector('div.flex.gap-x-1 > button');
                 console.log("sendButton:", sendButton);
                 if (sendButton && !sendButton.disabled) {
                     sendButton.click();
@@ -33,6 +34,7 @@ if (window.location.hostname.includes("chatgpt.com")) {
         }
     }, 500);
 
+    // Au bout de 10 secondes, si on n'arrive pas à exécuter le script, on l'arrête 
     setTimeout(() => clearInterval(intervalId), 10000);
 }
 
