@@ -6,19 +6,20 @@
   "content_scripts": [
     {
       "js": ["script.js"],
+      "css": ["style.css"],
       "matches": ["<all_urls>"]
     }
   ],
-  "permissions": ["contextMenus", "activeTab", "scripting", "storage"],
+  "permissions": ["contextMenus", "activeTab", "scripting", "storage", "tabs"],
   "host_permissions": ["*://*/*", "https://chatgpt.com/*"],
 
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
-  "icons": {"16":"Icons/icon16.png",
-            "32":"Icons/icon32.png",
-            "128":"Icons/icon128.png"
-
+  "icons": {
+    "16":"Icons/icon16.png",
+    "32":"Icons/icon32.png",
+    "128":"Icons/icon128.png"
   }
 }
