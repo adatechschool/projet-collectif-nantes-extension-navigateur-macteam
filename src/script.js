@@ -81,7 +81,6 @@ function createPopup(e){
     document.body.appendChild(popup);
 }
 
-
 // Événement qui se déclenche lorsque le texte est surligné
 document.addEventListener("mouseup",(e) => {
     const selectionText = window.getSelection().toString();
@@ -92,7 +91,3 @@ document.addEventListener("mouseup",(e) => {
     
     createPopup(e)
 })
-
-// document.addEventListener("click", () => {
-//     removePopup()
-// })
