@@ -3,21 +3,17 @@
   "name": "Help IA",
   "description": "Extension AI Assistance",
   "version": "1.0",
-  "action": {
-    "default_popup": "index.html"
-  },
   "content_scripts": [
     {
       "js": ["script.js"],
       "matches": ["<all_urls>"]
     }
   ],
-  "permissions": [
-    "contextMenus",
-    "activeTab",
-    "scripting"
-  ], 
-  "background":{
-    "service_worker":"background.js"
+  "permissions": ["contextMenus", "activeTab", "scripting", "storage"],
+  "host_permissions": ["*://*/*", "https://chatgpt.com/*"],
+
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
   }
 }
