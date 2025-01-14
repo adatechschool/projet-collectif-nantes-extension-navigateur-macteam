@@ -1,40 +1,80 @@
 // src\script.js
 
-console.log('Hello from content script!');
+// Initialisation du popup et du selectionText(contenu du texte surligné)
+let popup = null;
+let selectionText;
 
-if (window.location.hostname.includes("chatgpt.com")) {
-    console.log("Running content script logic on chatgpt.com");
+// Gestion du surlignage à l'aide la souris  
+document.addEventListener("mouseup", (e) => {
+    if (popup && popup.contains(e.target)) {   // Si un popup est deja visible, on bloque l'apparition d'un nouveau popup
+        return;
+    }
 
-    const intervalId = setInterval(async () => {
-        const textarea = document.querySelector("#prompt-textarea p");
-        console.log("textarea:", textarea);
+    selectionText = window.getSelection().toString().trim();  // On récupère le texte sélectionné et on le met dans selectionText
 
-        if (textarea) {
-            const { help_IA_text } = await chrome.storage.local.get("help_IA_text");
-            console.log("help_IA_text:", help_IA_text);
+    if (!selectionText) {  // Si aucun texte n'est sélectionné, on retire le popup 
+        removePopup();
+        return;
+    }
 
-            if (help_IA_text) {
-                textarea.innerText = help_IA_text;
+    createPopup(e);    
+});
 
-                textarea.dispatchEvent(new Event("input", { bubbles: true }));
+function createPopup(e) {
+    if (popup) {
+        removePopup();
+    }
 
-                // temps d'attente pour que le bouton "send" soit actif
-                await new Promise((resolve) => setTimeout(resolve, 700));
+    // On crée le popup
+    popup = document.createElement("div");
+    popup.classList.add("help-ia-popup");
+    
+    // On positionne le popup à l'endroit de la souris
+    popup.style.position = "absolute";
+    popup.style.top = `${e.pageY + 10}px`;
+    popup.style.left = `${e.pageX}px`;
+   // Création de l'icone du popup
+    const icon = document.createElement("img");
+    icon.src = "https://github.com/adatechschool/projet-collectif-nantes-extension-navigateur-macteam/blob/feature/popDisplay/public/Icons/icon128.png?raw=true";
+    icon.alt = "Help IA icon";
 
-                const sendButton = document.querySelector('div.flex.gap-x-1 > button');
-                console.log("sendButton:", sendButton);
-                if (sendButton && !sendButton.disabled) {
-                    sendButton.click();
-                }
+    popup.appendChild(icon);
+// Création des boutons du popup 
+    const summarizeBtn = document.createElement("button");
+    summarizeBtn.innerText = "Résumer";
+    summarizeBtn.addEventListener("click", () => handleClick("summary"));
 
-                await chrome.storage.local.remove("help_IA_text");
-            }
+    const explainBtn = document.createElement("button");
+    explainBtn.innerText = "Expliquer";
+    explainBtn.addEventListener("click", () => handleClick("explain"));
 
-            clearInterval(intervalId);
-        }
-    }, 500);
+    popup.appendChild(summarizeBtn);
+    popup.appendChild(explainBtn);
+// On ajoute le popup au body de la page
+    document.body.appendChild(popup);
 
-    // Au bout de 10 secondes, si on n'arrive pas à exécuter le script, on l'arrête 
-    setTimeout(() => clearInterval(intervalId), 10000);
+    // On crée un effet de transition pour le popup
+    setTimeout(() => {
+        popup.classList.add('show');
+    }, 10);
 }
 
+function removePopup() {
+    if (popup) {
+        popup.classList.remove('show');
+            popup.remove();
+            popup = null;
+    }
+}
+
+function handleClick(mode) {
+    // On enregistre le mode de l'extension IA et le texte sélectionné dans le stockage local
+    chrome.storage.local.set({
+        help_IA_text: selectionText,
+        help_IA_mode: mode
+    });
+// On bascule vers la page de chatGPT dans un nouvel onglet
+    window.open("https://www.chatgpt.com", "_blank");
+
+    removePopup();
+}
