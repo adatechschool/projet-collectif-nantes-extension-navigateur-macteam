@@ -7,7 +7,7 @@
     "start": "parallelshell \"npm run on-change:build\" \"npm run web-ext:chromium\"",
     "build": "npm run prepare-build && npm run vite-build",
     "prepare-build": "node ./build-scripts/prepare-build.js",
-    "vite-build": "npm run vite-build-background  && npm run vite-build-content",
+    "vite-build": "npm run vite-build-content",
     "vite-build-content": "vite build --config vite.config.content.js",
     "vite-build-background": "vite build --config vite.config.background.js",
     "web-ext:chromium": "npm run vite-build && npm run web-ext:dev-chromium",

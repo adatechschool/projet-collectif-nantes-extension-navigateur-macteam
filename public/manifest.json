@@ -18,11 +18,6 @@
   ],
   "permissions": ["contextMenus", "activeTab", "scripting", "storage", "tabs"],
   "host_permissions": ["https://chatgpt.com/*"],
-
-  "background": {
-    "service_worker": "background.js",
-    "type": "module"
-  },
   "icons": {
     "16":"Icons/icon16.png",
     "32":"Icons/icon32.png",
