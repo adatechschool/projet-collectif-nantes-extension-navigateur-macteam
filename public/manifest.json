@@ -7,11 +7,17 @@
     {
       "js": ["script.js"],
       "css": ["style.css"],
-      "matches": ["<all_urls>"]
+      "matches": ["<all_urls>"],
+      "run_at": "document_end"
+    },
+    {
+      "js": ["script_chatgpt.js"],
+      "matches": ["https://chatgpt.com/*"],
+      "run_at": "document_end"
     }
   ],
   "permissions": ["contextMenus", "activeTab", "scripting", "storage", "tabs"],
-  "host_permissions": ["*://*/*", "https://chatgpt.com/*"],
+  "host_permissions": ["https://chatgpt.com/*"],
 
   "background": {
     "service_worker": "background.js",

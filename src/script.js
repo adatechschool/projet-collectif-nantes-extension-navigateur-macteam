@@ -1,16 +1,14 @@
-// src\script.js 
-
-console.log('Hello from content script!');
+// src\script.js
 
 let popup = null;
-let selectionText = null;
+let selectionText;
 
 document.addEventListener("mouseup", (e) => {
     if (popup && popup.contains(e.target)) {
         return;
     }
 
-    selectionText = window.getSelection().toString().trim();
+    selectionText = window.getSelection().toString();
 
     if (!selectionText) {
         removePopup();
@@ -35,11 +33,11 @@ function createPopup(e) {
     const summarizeBtn = document.createElement("button");
     summarizeBtn.innerText = "Résumé";
     summarizeBtn.style.marginRight = "10px";
-    summarizeBtn.addEventListener("click", () => handleSummary());
+    summarizeBtn.addEventListener("click", () => handleClick("summary"));
 
     const explainBtn = document.createElement("button");
     explainBtn.innerText = "Expliquer";
-    explainBtn.addEventListener("click", () => handleExplanation());
+    explainBtn.addEventListener("click", () => handleClick("explain"));
 
     popup.appendChild(summarizeBtn);
     popup.appendChild(explainBtn);
@@ -54,12 +52,13 @@ function removePopup() {
     }
 }
 
-function handleSummary() {
-    console.log("handleSummary");
-    removePopup();
-}
+function handleClick(mode) {
+    chrome.storage.local.set({
+        help_IA_text: selectionText,
+        help_IA_mode: mode
+    });
 
-function handleExplanation() {
-    console.log("handleExplanation");
+    window.open("https://www.chatgpt.com", "_blank");
+
     removePopup();
 }
