@@ -1,14 +1,41 @@
 # Organisation de l'équipe
 
-*Le but de ce fichier est de mettre à plat l'organisation de votre équipe et de votre semaine de projet - il est à remplir le lundi du lancement du projet et à présenter à l'encadrante du jour*
+### Git workflow
 
-## Roadmap
+#### Branches primordiales
 
-- Produire un découpage de features et créer autant  d'"issues" sur votre repo (selon la méthode vue avec Adrien en plénière)
+- **main** : branche principale à ne pas toucher _(sauf pour les mise en production)_
+
+- **dev** : branche de développement _(à partir de laquelle on crée des branches de fonctionnalités et on merge les branches de fonctionnalités)_
+
+#### Branches de fonctionnalités
+
+- **feature/(nom-de-la-fonctionnalité-initiale-dev)** : branche de fonctionnalité _(à partir de la branche dev)_
+
+## Processus git flow pour une nouvelle fonctionnalité
+
+Avant de commencer :
+
+1. `git checkout dev` : on se place sur la branche dev
+2. `git pull origin dev` : on s'assure de récupérer les mises à jour de la branche dev
+3. `git branch feature/(nom-de-la-fonctionnalité)` : on crée une nouvelle branche de fonctionnalité
+4. `git checkout feature/(nom-de-la-fonctionnalité)` : on se place sur la nouvelle branche de fonctionnalité
+
+Après avoir effectué des modifications :
 
 
-## Mode de fonctionnement 
+5. `git add .` : on ajoute les fichiers modifiés
+6. `git commit -m "message"` : on commit les modifications
+7. `git push origin feature/(nom-de-la-fonctionnalité)` : on push la branche de fonctionnalité sur le repo distant
+8. on crée une pull request sur github pour merger la branche de fonctionnalité sur la branche dev
+9. En cas de conflit, on résout le conflit en local, on commit et on push à nouveau. Pour cela, il faut:
 
-- Expliciter ici sous quel mode vous allez fonctionner : en mob programming à 3 ou 4, et pair programming par binômes, individuellement, etc.
-- Si vous ne travaillez pas en mob programming, indiquez également quels sont les rituels que vous comptez mettre en place pour (1) faire des points de synchronisation au sein de l'équipe et partager votre avancement et (2) mettre en commun votre code et vérifier que l'ensemble du projet fonctionne bien.
-- Notez enfin les règles de gestion que vous décidez de mettre en place pour le repo : utilisation des branches, utilisation des pulls requests, process de validation des pulls requests avant de les fusionner, etc.
+- `git checkout dev` : on se place sur la branche dev
+- `git pull origin dev` : on s'assure de récupérer les mises à jour de la branche dev
+- `git checkout feature/(nom-de-la-fonctionnalité)` : on se place sur la branche de fonctionnalité
+- `git rebase dev` : on rebase la branche de fonctionnalité sur la branche dev
+- on résout les conflits en local
+- `git add .` : on ajoute les fichiers modifiés (résolution des conflits)
+- `git rebase --continue` : on continue le rebase
+- `git push origin feature/(nom-de-la-fonctionnalité)` : on push la branche de fonctionnalité sur le repo distant
+- on crée une pull request sur github pour merger la branche de fonctionnalité sur la branche dev

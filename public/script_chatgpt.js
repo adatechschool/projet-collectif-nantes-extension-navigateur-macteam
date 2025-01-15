@@ -1,4 +1,5 @@
 // public\script_chatgpt.js
+
 function selectMode(mode, promptToInject) {
     if (mode === "explain") {
         promptToInject += "\n\n  Instruction: Fais-moi une explication de ce texte.";
