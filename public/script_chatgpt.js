@@ -17,8 +17,8 @@ function injectSelectedText(promptToInject, textarea) {
 }
 
 function sendButtonClick() {
-    const sendButton = document.querySelector('div.flex.gap-x-1 > button');
-
+    const sendButton = document.querySelector('div.flex.gap-x-1 > div > button');
+console.log(sendButton)
     if (sendButton && !sendButton.disabled) {
         setTimeout(() => sendButton.click(), 700);
     }
